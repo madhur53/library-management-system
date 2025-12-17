@@ -1,0 +1,175 @@
+/* src/App.css */
+
+/* Theme colors */
+:root{
+  --brand: #0d6efd; /* bootstrap primary */
+  --muted: #6c757d;
+  --card-bg: #ffffff;
+  --bg: #f5f7fb;
+  --soft-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+
+/* Page background */
+body {
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #222;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Navbar adjustments */
+.navbar {
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+}
+
+/* Brand styling */
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+/* Content container */
+.container-main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 18px;
+}
+
+/* Sidebar card */
+.side-panel .card {
+  border-radius: 12px;
+  box-shadow: var(--soft-shadow);
+}
+
+/* Main content cards */
+.card-elevated {
+  border: 0;
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: var(--soft-shadow);
+  padding: 18px;
+}
+
+/* Book card grid */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+/* Book card */
+.book-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform .15s ease, box-shadow .15s ease;
+  background: linear-gradient(180deg, #fff 0%, #fbfdff 100%);
+  border: 1px solid rgba(13,110,253,0.03);
+}
+.book-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(13,110,253,0.08);
+}
+
+/* Book cover placeholder */
+.book-cover {
+  height: 160px;
+  background: linear-gradient(180deg,#eef6ff,#f7fbff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:var(--muted);
+  font-size:18px;
+}
+
+/* Book body */
+.book-body {
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  flex:1;
+}
+.book-title {
+  font-weight:600;
+  font-size:15px;
+  line-height:1.2;
+}
+.book-meta {
+  font-size:13px;
+  color:var(--muted);
+}
+
+/* Action row */
+.book-actions {
+  display:flex;
+  gap:8px;
+  margin-top:auto;
+}
+
+/* Forms */
+.form-control, .form-select {
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+/* Big primary button */
+.btn-primary {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight:600;
+}
+
+/* Small badges */
+.badge-soft {
+  background: rgba(13,110,253,0.08);
+  color: var(--brand);
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* UserInfo */
+.profile-card {
+  border-radius: 10px;
+  padding: 12px;
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.profile-avatar {
+  width:56px;
+  height:56px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#e9f2ff,#eef8ff);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  color:var(--brand);
+  font-size:20px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+  .book-grid { grid-template-columns: repeat(2, 1fr); }
+  .container-main { padding: 12px; }
+}
+
+/* dark mode vars */
+:root { --bg: #f5f7fb; --text: #111; --card-bg: #fff; --muted: #6c757d; }
+[data-theme="dark"] {
+  --bg: #0f1724;
+  --text: #e6eef8;
+  --card-bg: #0b1220;
+  --muted: #9aa6b2;
+}
+body { background: var(--bg); color: var(--text); }
+.card-elevated { background: var(--card-bg); }
+

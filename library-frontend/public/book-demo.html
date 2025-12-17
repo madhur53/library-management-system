@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Book Demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+  <div id="app" class="container">
+    <div id="card" class="card p-3" style="max-width:640px;">
+      <h4 id="title">Book Demo (id: 2)</h4>
+      <p id="avail">Checking...</p>
+      <div>
+        <button id="borrowByBookBtn" class="btn btn-primary">Borrow (by book)</button>
+        <button id="borrowSpecificBtn" class="btn btn-outline-primary">Borrow specific copy</button>
+        <button id="returnBtn" class="btn btn-outline-secondary">Return</button>
+        <button id="refreshBtn" class="btn btn-link">Refresh</button>
+      </div>
+      <div id="msg" class="mt-2"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { checkAvailability, borrowByBook, borrowCopy, returnCopy } from '/src/api.js';
+
+    const BOOK_ID = 2;
+    const USER_ID = 12; // use logged-in id in real app
+
+    const availEl = document.getElementById('avail');
+    const msg = document.getElementById('msg');
+
+    async function refresh() {
+      msg.innerHTML = '';
+      try {
+        const data = await checkAvailability(BOOK_ID);
+        availEl.innerHTML = `Available: <strong>${data.availableCopies}</strong> / ${data.totalCopies}`;
+      } catch (e) {
+        availEl.textContent = 'Error checking availability';
+        msg.innerHTML = `<div class="text-danger small">${e.message}</div>`;
+      }
+    }
+
+    document.getElementById('borrowByBookBtn').addEventListener('click', async () => {
+      msg.innerHTML = 'Processing...';
+      try {
+        const res = await borrowByBook(BOOK_ID, USER_ID);
+        msg.innerHTML = `<div class="text-success small">Borrowed copy ${res.bookCopyId}</div>`;
+        await refresh();
+      } catch (e) {
+        msg.innerHTML = `<div class="text-danger small">${e.message}</div>`;
+      }
+    });
+
+    document.getElementById('borrowSpecificBtn').addEventListener('click', async () => {
+      // demo: fetch available copies and pick first
+      msg.innerHTML = 'Looking for an available copy...';
+      try {
+        const copies = await fetch(`/api/catalog/copies/book/${BOOK_ID}`).then(r => r.json());
+        const avail = copies.find(c => c.status === 'AVAILABLE');
+        if (!avail) throw new Error('No available copy');
+        const res = await borrowCopy(avail.id, USER_ID);
+        msg.innerHTML = `<div class="text-success small">Borrowed specific copy ${res.bookCopyId}</div>`;
+        await refresh();
+      } catch (e) {
+        msg.innerHTML = `<div class="text-danger small">${e.message}</div>`;
+      }
+    });
+
+    document.getElementById('returnBtn').addEventListener('click', async () => {
+      // demo: ask user for copy id
+      const copyId = prompt('Enter bookCopyId to return (e.g. 5)');
+      if (!copyId) return;
+      try {
+        await returnCopy(Number(copyId), USER_ID);
+        msg.innerHTML = `<div class="text-success small">Returned copy ${copyId}</div>`;
+        await refresh();
+      } catch (e) {
+        msg.innerHTML = `<div class="text-danger small">${e.message}</div>`;
+      }
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', refresh);
+    refresh();
+  </script>
+</body>
+</html>
